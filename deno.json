@@ -1,0 +1,26 @@
+{
+	"tasks": {
+		"lume": "echo \"import 'lume/cli.ts'\" | deno run -A -",
+		"build": "deno task lume",
+		"serve": "deno task lume -s"
+	},
+	"compilerOptions": {
+		"types": ["lume/types.ts"],
+		"jsx": "react-jsx",
+		"jsxImportSource": "npm:preact"
+	},
+	"lint": {
+		"rules": {
+			"tags": ["recommended"]
+		}
+	},
+	"fmt": {
+		"useTabs": true,
+		"indentWidth": 3,
+		"semiColons": true,
+		"singleQuote": true
+	},
+	"imports": {
+		"lume/": "https://deno.land/x/lume@v2.0.3/"
+	}
+}
