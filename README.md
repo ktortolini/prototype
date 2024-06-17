@@ -36,11 +36,11 @@ deno cache serve.ts
 
 ## 🔥 _Usage Information_
 
-Currently, the canvas displays a singular piece, that may be changed by the user clicking on the empty canvas. Each click will add a unique random line to the canvas, and each line has a color property that slightly changes from addition to addition.
+Currently, the canvas displays a singular dark space within the viewport of the Browser, that may be changed with the user clicking and interacting with the empty canvas. Each click will add a unique blob of colorful dots to the canvas, and each dot has a color property that slightly changes from one iteration to the next using a gradient.
 
 ## 🦕 _Deno Deployment_
 
-This project was deployed on [Deno Deploy](https://color-gradients-explored.deno.dev/).
+This project was deployed on [Deno Deploy](https://tortolini-prototype.deno.dev/).
 
 ## 💬 _Questions_
 
