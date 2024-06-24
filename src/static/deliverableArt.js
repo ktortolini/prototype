@@ -5,6 +5,9 @@
  * @date on 06/07/2024
  */
 
+const totalIterations = 120;
+const randomDeviation = 0.07;
+
 const colorArray = [
 	[31, 224, 105],
 	[224, 31, 150],
@@ -61,39 +64,35 @@ class CustomShape {
 	}
 
 	CustomBezierShape(vertX, vertY, controlPoints) {
-		for (let i = 0; i < controlPoints.length; i++) {
-			const cPoint1X = vertX +
-				random(
-					(controlPoints[i][0]) - (0.07 + randomDeviation),
-					(controlPoints[i][0]) + (0.07 + randomDeviation),
-				);
-			const cPoint1Y = vertY +
-				random(
-					(controlPoints[i][1]) - (0.26 + randomDeviation),
-					(controlPoints[i][1]) + (0.26 + randomDeviation),
-				);
-			const cPoint2X = vertX +
-				random(
-					(controlPoints[i][2]) - (0.52 + randomDeviation),
-					(controlPoints[i][2]) + (0.52 + randomDeviation),
-				);
-			const cPoint2Y = vertY +
-				random(
-					(controlPoints[i][3]) - (0.52 + randomDeviation),
-					(controlPoints[i][3]) + (0.52 + randomDeviation),
-				);
-			const endPointX = vertX +
-				random(
-					(controlPoints[i][4]) - (0.26 + randomDeviation),
-					(controlPoints[i][4]) + (0.26 + randomDeviation),
-				);
-			const endPointY = vertY +
-				random(
-					(controlPoints[i][5]) - (0.07 + randomDeviation),
-					(controlPoints[i][5]) + (0.07 + randomDeviation),
-				);
+		noFill(); // Set no fill for the shape
+		beginShape();
+		vertex(vertX, vertY); // Starting point for the Bezier curves
 
-			/**/
+		for (let i = 0; i < controlPoints.length; i++) {
+			const cPoint1X = vertX + random(
+				(controlPoints[i][0]) - (0.07 + randomDeviation),
+				(controlPoints[i][0]) + (0.07 + randomDeviation),
+			);
+			const cPoint1Y = vertY + random(
+				(controlPoints[i][1]) - (0.26 + randomDeviation),
+				(controlPoints[i][1]) + (0.26 + randomDeviation),
+			);
+			const cPoint2X = vertX + random(
+				(controlPoints[i][2]) - (0.52 + randomDeviation),
+				(controlPoints[i][2]) + (0.52 + randomDeviation),
+			);
+			const cPoint2Y = vertY + random(
+				(controlPoints[i][3]) - (0.52 + randomDeviation),
+				(controlPoints[i][3]) + (0.52 + randomDeviation),
+			);
+			const endPointX = vertX + random(
+				(controlPoints[i][4]) - (0.26 + randomDeviation),
+				(controlPoints[i][4]) + (0.26 + randomDeviation),
+			);
+			const endPointY = vertY + random(
+				(controlPoints[i][5]) - (0.07 + randomDeviation),
+				(controlPoints[i][5]) + (0.07 + randomDeviation),
+			);
 
 			bezierVertex(
 				cPoint1X,
@@ -104,51 +103,19 @@ class CustomShape {
 				endPointY,
 			);
 
-			/**/
-
 			vertX = endPointX;
 			vertY = endPointY;
 		}
-		return new CustomShape(vertX, vertY);
+		endShape(CLOSE);
 	}
 
 	smallFootprint() {
-		/**/
-
-		beginShape();
-
-		/**/
-
-		const startingX = 3.2192;
-		const startingY = 23.7279;
-
-		/**
-		 * This application uses p5.js and p5 vertex() method,
-		 * see: {@link https://p5js.org/reference/#/p5/vertex}
-		 */
-
-		vertex(
-			random(startingX, startingX),
-			random(startingY, startingY),
-		);
-
-		/**/
-
-		let footprint = new CustomShape(startingX, startingY);
-		footprint = footprint.CustomBezierShape(
-			startingX,
-			startingY,
-			[
-				[-4.0351, -2.4946, 0.4248, -7.4175, -0.7657, -10.8786],
-				[-3.91, -5.958, -2.062, -14.712, 6.55, -11.757],
-				[5.4112, 2.0784, 1.3328, 8.1257, 0.7687, 11.9033],
-				[2.1897, 5.5893, 1.0302, 12.8117, -6.5534, 10.732],
-			],
-		);
-
-		/**/
-
-		endShape(CLOSE);
+		this.CustomBezierShape(this.customX, this.customY, [
+			[-4.0351, -2.4946, 0.4248, -7.4175, -0.7657, -10.8786],
+			[-3.91, -5.958, -2.062, -14.712, 6.55, -11.757],
+			[5.4112, 2.0784, 1.3328, 8.1257, 0.7687, 11.9033],
+			[2.1897, 5.5893, 1.0302, 12.8117, -6.5534, 10.732],
+		]);
 	}
 }
 
@@ -160,57 +127,31 @@ class CustomShape {
  * @summary Add a line of two colors when a user clicks on the canvas
  */
 
-function drawRandomGradientLine() {
-	/**
-	 * Add a random length for the lines in the blob
-	 */
+function drawRandomGradientLine(x, y) {
 	const length = random(1, 16);
-
-	/**
-	 * Randomly select an index for the starting color from the colorArray
-	 */
-
 	const colorStartIndex = int(random(colorArray.length));
-
-	/**
-	 * Randomly select an index for the ending color from the colorArray
-	 */
-
 	const colorEndIndex = int(random(colorArray.length));
 
-	/**
-	 * Retrieve the starting color using the selected index and spread operator to pass RGB values
-	 */
+	// Retrieve the starting and ending colors from the colorArray
+	let colorStart = colorArray[colorStartIndex];
+	let colorEnd = colorArray[colorEndIndex];
 
-	const colorStart = color(...colorArray[colorStartIndex]);
+	// Apply a random tint by modifying the RGB values
+	colorStart = colorStart.map((c) => max(0, min(255, c + random(-75, 75))));
+	colorEnd = colorEnd.map((c) => max(0, min(255, c + random(-75, 75))));
 
-	/**
-	 * Retrieve the ending color using the selected index and spread operator to pass RGB values
-	 */
-
-	const colorEnd = color(...colorArray[colorEndIndex]);
-
-	/**/
+	// Convert arrays back to p5 Color objects
+	const p5ColorStart = color(...colorStart);
+	const p5ColorEnd = color(...colorEnd);
 
 	let endX, endY;
 	const direction = random([0, 90, 180, 270]);
 
-	/**/
-
 	for (let i = 0; i <= length; i++) {
-		/**
-		 * Recalculate offsets for each segment of the line to create continuous change
-		 */
-
 		const offsetX = random(-12, 12);
 		const offsetY = random(-12, 12);
-
-		/**/
-
-		const startX = mouseX + offsetX;
-		const startY = mouseY + offsetY;
-
-		/**/
+		const startX = x + offsetX;
+		const startY = y + offsetY;
 
 		switch (direction) {
 			case 0:
@@ -232,40 +173,51 @@ function drawRandomGradientLine() {
 		}
 
 		let interpolation = map(i, 0, length, 0, 1);
-		let gradientColor = lerpColor(colorStart, colorEnd, interpolation);
-
-		/**/
+		let gradientColor = lerpColor(p5ColorStart, p5ColorEnd, interpolation);
 
 		stroke(gradientColor);
-
-		/**/
-
 		line(startX, startY, endX, endY);
 	}
 }
 
-// Add this new function
-function drawLinesInShape() {
-	let shape = new CustomShape(0, 0); // Initialize with arbitrary values
-	shape.smallFootprint(); // Set up the shape
+function drawLinesInShape(x, y) {
+	let shape = new CustomShape(x, y);
+	shape.smallFootprint(); // This sets up the shape
+
+	// Temporarily disable the canvas clipping
+	drawingContext.clip();
+
+	// Draw gradient lines
 	for (let i = 0; i < 10; i++) {
-		drawRandomGradientLine();
+		drawRandomGradientLine(x, y);
 	}
-}
 
-// Modify the mousePressed function
-function mousePressed() {
-	drawLinesInShape();
-}
+	// Re-enable clipping to the shape of the footprint
+	beginShape();
+	shape.CustomBezierShape(x, y, [
+		[-4.0351, -2.4946, 0.4248, -7.4175, -0.7657, -10.8786],
+		[-3.91, -5.958, -2.062, -14.712, 6.55, -11.757],
+		[5.4112, 2.0784, 1.3328, 8.1257, 0.7687, 11.9033],
+		[2.1897, 5.5893, 1.0302, 12.8117, -6.5534, 10.732],
+	]);
+	endShape(CLOSE);
 
-// Modify the mouseDragged function
-function mouseDragged() {
-	drawLinesInShape();
+	// Use the shape as a clipping path
+	drawingContext.clip();
+
+	// Clear outside the clipping path by redrawing the background
+	background(0); // Assuming the background is black
+
+	// Redraw the shape to ensure it's visible
+	shape.smallFootprint();
 }
 
 function draw() {
-	/**
-	 * The draw function is left empty since lines are
-	 * drawn in the mousePressed and mouseDragged functions
-	 */
+	for (let step = 0; step < totalIterations; step++) {
+		let stepX = random(width); // Random X position across the viewport
+		let stepY = height - step * random(10, 20); // Move up the screen with each step
+		push();
+		drawLinesInShape(stepX, stepY);
+		pop();
+	}
 }
