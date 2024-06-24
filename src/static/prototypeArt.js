@@ -2,7 +2,7 @@
  * @author ktortolini
  *
  * @name ~PrototypeArt~
- * @date on 06/07/2024
+ * @date on 06/06/2024
  */
 
 const colorArray = [
